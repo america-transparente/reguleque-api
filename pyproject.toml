@@ -1,0 +1,28 @@
+[tool.poetry]
+authors = ["Agustín Covarrubias <agucova@uc.cl>"]
+description = "API for reguleque.cl"
+name = "reguleque-api"
+version = "0.1.0"
+
+[tool.poetry.dependencies]
+bspm = "^1.0.0"
+fastapi = {extras = ["all"], version = "^0.63.0"}
+motor = "^2.3.0"
+pandas = "^1.2.4"
+pydantic = "^1.8.1"
+pymongo = {extras = ["srv"], version = "^3.11.3"}
+python = "^3.9"
+python-dotenv = "^0.17.0"
+python-multipart = "^0.0.5"
+sentry_sdk = "^1.0.0"
+uvicorn = "^0.13.4"
+odmantic = "^0.3.4"
+asyncio = "^3.4.3"
+
+[tool.poetry.dev-dependencies]
+black = "^21.4b0"
+flake8 = "^3.9.1"
+
+[build-system]
+build-backend = "poetry.masonry.api"
+requires = ["poetry>=0.12"]
