@@ -1,8 +1,12 @@
-from reguleque_api.db.database_manager import DatabaseManager
-from reguleque_api.db.mongo_manager import MongoManager
+from motor.motor_asyncio import AsyncIOMotorClient, AsyncIOMotorCollection
+from odmantic import AIOEngine
+from reguleque_api.config import get_config
+from reguleque_api.db.models import RevenueEntry
 
-db = MongoManager()
+config = get_config()
+db_path = config.db_path
+db_name = config.db_name
 
-
-async def get_database() -> DatabaseManager:
-    return db
+client = AsyncIOMotorClient(db_path)
+engine = AIOEngine(motor_client=client, database=db_name)
+rev_collection: AsyncIOMotorCollection = engine.get_collection(RevenueEntry)

@@ -1,19 +1,29 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter
 
-from reguleque_api.db import DatabaseManager, get_database
-from bson.decimal128 import Decimal128
+from reguleque_api.db import engine
 from odmantic.bson import ObjectId
+from reguleque_api.db.models import RevenueEntry
 
-router = APIRouter()
+router = APIRouter(prefix="/entries")
 
 
 @router.get("/")
-async def all_entries(db: DatabaseManager = Depends(get_database)):
-    entries = await db.get_entries()
-    return entries
+async def all_entries():
+    return await engine.find(RevenueEntry)
 
 
-@router.get("/{entry_id}")
-async def one_entry(entry_id: ObjectId, db: DatabaseManager = Depends(get_database)):
-    entry = await db.get_entry(entry_id=entry_id)
+# TODO: UNSAFE, AUTH NEEDED
+@router.put("/", response_model=RevenueEntry)
+async def new_entry(entry: RevenueEntry):
+    await engine.save(entry)
     return entry
+
+
+@router.get("/{entry_id}", response_model=RevenueEntry)
+async def get_entry(entry_id: ObjectId):
+    return await engine.find_one(RevenueEntry, RevenueEntry.id == entry_id)
+
+
+@router.get("/count", response_model=int)
+async def count_entries():
+    return await engine.count(RevenueEntry)
